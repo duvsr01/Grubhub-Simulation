@@ -33,23 +33,13 @@ export const updateUserProfile = data => dispatch => {
     .post("http://localhost:3500/api/profile/updprofile", data)
     .then(response => {
       console.log("Status Code : ", response.status);
-      console.log(response);
+      console.log("update profile response" + response);
       if (response.status === 200) {
         console.log("Update Profile Request successful");
         dispatch({
           type: UPDATE_PROFILE_DATA,
           payload: response.data
         });
-
-        // if (response.data.success === true) {
-        //   this.setState({
-        //     authFlag: true
-        //   });
-        // } else if (response.status === 400) {
-        //   this.setState({
-        //     authFlag: false
-        //   });
-        // }
       }
     })
     .catch(error => {
@@ -57,7 +47,5 @@ export const updateUserProfile = data => dispatch => {
         type: GET_ERRORS,
         payload: error.response.data
       });
-      // console.log("Error in updating buyer profile", error);
-      // console.log("authflag" + this.state.authFlag);
     });
 };

@@ -33,28 +33,33 @@ class ProfileInfo extends Component {
     this.setState({ open: false });
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getUserProfile();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    let profileDetails = nextProps.profile.user;
-    let userType = profileDetails.user_type;
-    console.log("Usertype in profile is" + this.props.profile.user.user_type);
-    this.setState({
-      firstname: profileDetails.first_name,
-      lastname: profileDetails.last_name,
-      username: profileDetails.first_name + " " + profileDetails.last_name,
-      email: profileDetails.email_id,
-      phone: profileDetails.phone_number
-    });
-    if (userType === "owner") {
+    if (nextProps.profile.user.user) {
+      let profileDetails = nextProps.profile.user.user;
+      let userType = profileDetails.user_type;
+      // console.log(
+      //   "printing the profile details" +
+      //     JSON.stringify(nextProps.profile.user.user)
+      // );
       this.setState({
-        ownerAccountFlag: true,
-        restaurantname: profileDetails.rest_name,
-        restaurantzip: profileDetails.rest_zipcode,
-        restaurant_cuisine: profileDetails.rest_cuisine
+        firstname: profileDetails.first_name,
+        lastname: profileDetails.last_name,
+        username: profileDetails.first_name + " " + profileDetails.last_name,
+        email: profileDetails.email_id,
+        phone: profileDetails.phone_number
       });
+      if (userType === "owner") {
+        this.setState({
+          ownerAccountFlag: true,
+          restaurantname: profileDetails.rest_name,
+          restaurantzip: profileDetails.rest_zipcode,
+          restaurant_cuisine: profileDetails.rest_cuisine
+        });
+      }
     }
   }
 

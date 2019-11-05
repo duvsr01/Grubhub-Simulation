@@ -1,18 +1,12 @@
 const express = require("express");
-const mysql = require("mysql");
 const app = express();
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var path = require("path");
-var cookieParser = require("cookie-parser");
 var cors = require("cors");
 app.set("view engine", "ejs");
-const url = require("url");
-const querystring = require("querystring");
-var passwordHash = require("password-hash");
-var mongo = require("mongodb");
 const mongoose = require("mongoose");
 const passport = require("passport");
+var kafka = require("./kafka/client");
 
 //defining routes
 const login = require("./routes/api/login");
@@ -38,44 +32,6 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-//Create Connection
-/*const db = mysql.createConnection({
-  connectionLimit: 10,
-  host: "localhost",
-  user: "sruthi",
-  password: "admin",
-  database: "nodemysql"
-});
-
-//connect
-db.connect(function(err) {
-  if (err) {
-    console.log("Connection Error" + err);
-  } else {
-    console.log("MySql Connected...");
-  }
-}); */
-
-/* Direct Mongodb connection
-const MongoClient = require("mongodb").MongoClient;
-const assert = require("assert");
-
-// Connection URL
-const db_url = "mongodb://localhost:27017";
-
-// Database Name
-const dbName = "nodedb";
-
-// Use connect method to connect to the server
-MongoClient.connect(db_url, function(err, client) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-
-  const db = client.db(dbName);
-
-  client.close();
-}); */
 
 // Mongoose DB config
 const db = require("./config/keys").mongoURI;

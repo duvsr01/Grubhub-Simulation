@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
+import { pastOrders } from "../_actions/orders.actions.js";
+import IsEmpty from "../validation/is.empty.js";
+import { connect } from "react-redux";
 
 class PastOrders extends Component {
   state = {
@@ -9,19 +13,19 @@ class PastOrders extends Component {
   componentDidMount() {
     const orders = this.state.orders;
     console.log("Orders" + orders);
-    var buyer_id = localStorage.getItem("userID");
-    axios
-      .get("http://localhost:3500/api/orders/pastOrders", {
-        params: { buyer_id: buyer_id }
-      })
-      .then(response => {
-        let newState = Object.assign({}, this.state);
-        let newOrders = newState.orders;
+    this.props.pastOrders();
+  }
 
-        console.log("printing initial state" + newOrders);
+  componentDidUpdate(prevProps) {
+    if (this.props.orderState !== prevProps.orderState) {
+      let newState = Object.assign({}, this.state);
+      let newOrders = [];
 
-        let orderData = response.data;
-        console.log("Order Data is " + orderData);
+      console.log("printing initial state" + newOrders);
+
+      if (!IsEmpty(this.props.orderState.past_orders)) {
+        let orderData = this.props.orderState.past_orders.result;
+        console.log("Order Data is " + JSON.stringify(orderData));
 
         var newRestaurant = "";
 
@@ -55,12 +59,10 @@ class PastOrders extends Component {
         this.setState({
           orders: newOrders
         });
-      })
-      .catch(error => {
-        console.log("Error Occured", error);
-      });
+      }
 
-    console.log("printing orders" + this.state.orders);
+      console.log("printing orders" + this.state.orders);
+    }
   }
 
   render() {
@@ -79,7 +81,7 @@ class PastOrders extends Component {
                 <div className="col-auto">
                   <label className="text-primary">Restaurant Name:</label>
                   <div className="row-auto">
-                    <span>{i.restaurantname}</span>
+                    <span>{i.res_name}</span>
                   </div>
                 </div>
                 <div className="col-4">
@@ -122,4 +124,20 @@ class PastOrders extends Component {
     );
   }
 }
-export default PastOrders;
+
+PastOrders.propTypes = {
+  pastOrders: PropTypes.func.isRequired,
+  orderState: PropTypes.object,
+  errors: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  auth: state.authState,
+  orderState: state.orderState,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { pastOrders }
+)(PastOrders);

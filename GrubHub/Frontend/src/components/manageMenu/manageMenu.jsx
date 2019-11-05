@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import { getMenu, updateMenu } from "../_actions/menu.actions.js";
+import PropTypes from "prop-types";
 
 class ManageMenu extends Component {
   state = {
@@ -17,32 +20,26 @@ class ManageMenu extends Component {
   };
 
   componentDidMount() {
-    var email = localStorage.getItem("email");
+    this.props.getMenu();
+  }
 
-    axios
-      .get("http://localhost:3500/api/menu/getMenu", {
-        params: { email: email }
-      })
-      .then(response => {
-        let newState = Object.assign({}, this.state);
-        let newMenu = newState.menu;
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.menuState.menu.menu) {
+      let menuData = nextProps.menuState.menu.menu;
 
-        console.log("printing initial state" + newMenu);
+      let newState = Object.assign({}, this.state);
+      let newMenu = newState.menu;
+      console.log("Menu Response Data is " + menuData);
 
-        console.log("Response Data is " + response.data);
-
-        let menuData = response.data.menu;
-        console.log("Menu Data is " + menuData);
-
-        this.setState({
-          menu: menuData
-        });
-      })
-      .catch(error => {
-        console.log("Error Occured", error);
+      this.setState({
+        menu: menuData
       });
-
-    console.log("printing backend menu" + this.state.menu);
+    }
+    if (nextProps.menuState.result) {
+      this.setState({
+        response_msg: nextProps.menuState.result
+      });
+    }
   }
 
   addSection = sectionName => {
@@ -160,32 +157,12 @@ class ManageMenu extends Component {
     };
 
     console.log("sending menu details" + data);
-
-    axios
-      .post("http://localhost:3500/api/menu/updatemenu", data)
-      .then(response => {
-        console.log("Status Code : ", response.status);
-        console.log(response);
-        if (response.status === 200) {
-          console.log("successful  response");
-          this.setState({
-            response_msg: "Menu Saved Successfully"
-          });
-        }
-      })
-      .catch(error => {
-        console.log("Incorrect Details", error);
-        console.log("authflag" + this.state.authFlag);
-      });
+    this.props.updateMenu(data);
   };
 
   handleSubmit = e => {
     //prevent page from refresh
     e.preventDefault();
-    // const errors = this.validate();
-    // console.log("errors -" + errors);
-    // if (errors) return;
-
     this.saveMenu();
   };
 
@@ -398,4 +375,18 @@ class ManageMenu extends Component {
   }
 }
 
-export default ManageMenu;
+ManageMenu.propTypes = {
+  getMenu: PropTypes.func.isRequired,
+  updateMenu: PropTypes.func.isRequired,
+  menuState: PropTypes.object,
+  errors: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  menuState: state.menuState,
+  errors: state.errors
+});
+export default connect(
+  mapStateToProps,
+  { getMenu, updateMenu }
+)(ManageMenu);

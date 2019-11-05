@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Redirect } from "react-router";
-import axios from "axios";
+import { getRestaurants } from "../_actions/restaurants.actions.js";
+import { searchItem } from "../_actions/restaurants.actions.js";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class SearchBar extends Component {
   constructor(props) {
@@ -23,20 +25,19 @@ class SearchBar extends Component {
   }
 
   componentDidMount() {
-    //make a post request with the user data
-    axios
-      .get("http://localhost:3500/api/restaurants/getRst")
-      .then(response => {
-        console.log(response);
-        this.setState({
-          ResultObj: this.state.ResultObj.concat(response.data.msg)
-        });
+    // Get Restaurant Data
+    this.props.getRestaurants();
+  }
 
-        console.log("ResultObj is" + JSON.stringify(this.state.ResultObj));
-      })
-      .catch(error => {
-        console.log("Error Occured", error);
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.restaurants.restaurant) {
+      console.log("the restaurants data is " + nextProps.restaurants);
+      this.setState({
+        ResultObj: nextProps.restaurants.restaurant.result
       });
+
+      console.log("ResultObj is" + JSON.stringify(this.state.ResultObj));
+    }
   }
 
   PageChangeHandler = e => {
@@ -66,17 +67,7 @@ class SearchBar extends Component {
     };
     console.log("data is" + JSON.stringify(data));
 
-    axios
-      .post("http://localhost:3500/api/restaurants/searchItem", data)
-      .then(response => {
-        this.setState({
-          ResultObj: []
-        });
-        this.setState({
-          ResultObj: this.state.ResultObj.concat(response.data)
-        });
-      });
-    console.log(this.state.ResultObj);
+    this.props.searchItem(data, this.props.history);
   };
 
   render() {
@@ -85,12 +76,6 @@ class SearchBar extends Component {
     const firstIndex = lastIndex - noOfOptions;
     const currentOption = ResultObj.slice(firstIndex, lastIndex);
     console.log("currentOption" + currentOption);
-    let currentO = this.state.current;
-    let noOfOption = this.state.noOfOptions;
-
-    // if (!this.state.logged) {
-    //   return <Redirect to="/welcomePage" />;
-    // }
 
     let details = currentOption.map((ResultObj, i) => {
       console.log("ResultObj" + ResultObj.res_name);
@@ -268,4 +253,17 @@ class SearchBar extends Component {
   }
 }
 
-export default SearchBar;
+SearchBar.propTypes = {
+  getRestaurants: PropTypes.func.isRequired,
+  restaurantState: PropTypes.object,
+  errors: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  restaurants: state.restaurantState,
+  errors: state.errorState
+});
+export default connect(
+  mapStateToProps,
+  { getRestaurants, searchItem }
+)(SearchBar);

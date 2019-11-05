@@ -5,6 +5,9 @@ import Draggable from "react-draggable";
 import Modal from "react-responsive-modal";
 import SendMessage from "../sendMessage/sendMessage";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { upComingOrders } from "../_actions/orders.actions.js";
+import IsEmpty from "../validation/is.empty.js";
 
 class UpComingOrders extends Component {
   state = {
@@ -84,21 +87,19 @@ class UpComingOrders extends Component {
   componentDidMount() {
     const orders = this.state.orders;
     console.log("Orders" + orders);
-    const { user } = this.props.auth;
+    this.props.upComingOrders();
+  }
 
-    console.log("printing user_id" + user.user_id);
-    axios
-      .get("http://localhost:3500/api/orders/upcomingOrders", {
-        params: { buyer_id: user.user_id }
-      })
-      .then(response => {
-        let newState = Object.assign({}, this.state);
-        let newOrders = newState.orders;
+  componentDidUpdate(prevProps) {
+    if (this.props.orderState !== prevProps.orderState) {
+      let newState = Object.assign({}, this.state);
+      let newOrders = [];
 
-        console.log("printing initial state" + newOrders);
+      console.log("printing initial state" + newOrders);
 
-        let orderData = response.data;
-        console.log("Order Data is " + orderData);
+      if (!IsEmpty(this.props.orderState.upcoming_orders)) {
+        let orderData = this.props.orderState.upcoming_orders.result;
+        console.log("Order Data is " + JSON.stringify(orderData));
 
         var newRestaurant = "";
 
@@ -134,12 +135,8 @@ class UpComingOrders extends Component {
         this.setState({
           orders: newOrders
         });
-      })
-      .catch(error => {
-        console.log("Error Occured", error);
-      });
-
-    console.log("printing orders" + this.state.orders);
+      }
+    }
   }
 
   onSendMsg = Index => {
@@ -262,8 +259,18 @@ class UpComingOrders extends Component {
   }
 }
 
+UpComingOrders.propTypes = {
+  upComingOrders: PropTypes.func.isRequired,
+  orderState: PropTypes.object,
+  errors: PropTypes.object
+};
+
 const mapStateToProps = state => ({
   auth: state.authState,
+  orderState: state.orderState,
   errors: state.errors
 });
-export default connect(mapStateToProps)(UpComingOrders);
+export default connect(
+  mapStateToProps,
+  { upComingOrders }
+)(UpComingOrders);

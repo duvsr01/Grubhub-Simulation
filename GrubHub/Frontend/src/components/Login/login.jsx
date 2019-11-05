@@ -38,6 +38,8 @@ class Login extends Component {
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+      let error_value = this.state.errors;
+      console.log("the errors in login state are" + error_value);
     }
   }
 
@@ -114,8 +116,8 @@ class Login extends Component {
 
   render() {
     let text;
-    if (this.props.errors !== null) {
-      let errors = this.props.errors;
+    if (this.state.errors !== null) {
+      let errors = this.state.errors.error;
       if (errors) {
         text = (
           <p className="text-danger">
@@ -204,7 +206,7 @@ Login.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.authState,
-  errors: state.errors
+  errors: state.errorState
 });
 export default connect(
   mapStateToProps,

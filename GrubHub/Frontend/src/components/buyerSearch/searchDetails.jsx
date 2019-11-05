@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { getMenu, updateMenu, getBuyerMenu } from "../_actions/menu.actions.js";
 
 class SearchDetails extends Component {
   state = {
@@ -30,28 +32,25 @@ class SearchDetails extends Component {
       buyer_email: buyer_email
     });
 
-    axios
-      .get("http://localhost:3500/api/menu/getBuyerMenu", {
-        params: { resID: resID }
-      })
-      .then(response => {
-        let newState = Object.assign({}, this.state);
-        let newMenu = newState.menu;
+    const data = {
+      resID: resID
+    };
 
-        console.log("printing initial state" + newMenu);
+    this.props.getBuyerMenu(data);
+  }
 
-        let menuData = response.data.menu;
-        console.log("Menu Data is " + menuData);
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.menuState.data.menu) {
+      let menuData = nextProps.menuState.data.menu;
 
-        this.setState({
-          menu: menuData
-        });
-      })
-      .catch(error => {
-        console.log("Error Occured", error);
+      let newState = Object.assign({}, this.state);
+      let newMenu = newState.menu;
+      console.log("Menu Response Data is " + menuData);
+
+      this.setState({
+        menu: menuData
       });
-
-    console.log("printing backend menu" + this.state.menu);
+    }
   }
 
   onQtyChange = value => {
@@ -163,4 +162,17 @@ class SearchDetails extends Component {
   }
 }
 
-export default SearchDetails;
+SearchDetails.propTypes = {
+  getBuyerMenu: PropTypes.func.isRequired,
+  menuState: PropTypes.object,
+  errors: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  menuState: state.menuState,
+  errors: state.errors
+});
+export default connect(
+  mapStateToProps,
+  { getMenu, updateMenu, getBuyerMenu }
+)(SearchDetails);

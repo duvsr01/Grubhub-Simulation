@@ -75,7 +75,7 @@ class ViewMessages extends Component {
         let newState = Object.assign({}, this.state);
         let newMessages = newState.messages;
         console.log("printing initial state" + newMessages);
-        let msgData = response.data;
+        let msgData = response.data.result;
         console.log("Message Data is " + msgData);
 
         var newRestaurant = "";

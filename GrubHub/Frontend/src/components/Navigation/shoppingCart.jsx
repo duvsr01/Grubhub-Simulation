@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { placeOrder } from "../_actions/orders.actions.js";
+import IsEmpty from "../validation/is.empty.js";
 
 class ShoppingCart extends Component {
   state = {
@@ -32,6 +36,27 @@ class ShoppingCart extends Component {
     }
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.orderState) {
+      console.log(
+        "the place order result is " +
+          JSON.stringify(nextProps.orderState.place_order.success)
+      );
+      if (nextProps.orderState.place_order) {
+        this.setState({
+          authFlag: nextProps.orderState.place_order.success
+        });
+      }
+    }
+
+    if (!IsEmpty(nextProps.errors)) {
+      console.log(
+        "printing nextprops errors" + JSON.stringify(nextProps.errors)
+      );
+      this.setState({ authFlag: false });
+    }
+  }
+
   //place order
   placeOrder = e => {
     var headers = new Headers();
@@ -41,27 +66,8 @@ class ShoppingCart extends Component {
     console.log("printing object1" + data);
 
     console.log("sending order details" + data);
-    axios
-      .post("http://localhost:3500/api/orders/placeOrder", data)
-      .then(response => {
-        console.log("Status Code : ", response.status);
-        console.log(response);
-        if (response.status === 200) {
-          console.log("successful response");
-          console.log("Order placed successfully");
-          this.setState({
-            authFlag: true
-          });
-          //localStorage.setItem("shoppingCart", " ");
-        }
-      })
-      .catch(error => {
-        console.log("Update failed", error);
-        this.setState({
-          authFlag: false
-        });
-        console.log("authflag is" + this.state.authflag);
-      });
+
+    this.props.placeOrder(data);
   };
 
   handleSubmit = e => {
@@ -149,4 +155,17 @@ class ShoppingCart extends Component {
   }
 }
 
-export default ShoppingCart;
+ShoppingCart.propTypes = {
+  placeOrder: PropTypes.func.isRequired,
+  orderState: PropTypes.object,
+  errors: PropTypes.object
+};
+
+const mapStateToProps = state => ({
+  orderState: state.orderState,
+  errors: state.errorState
+});
+export default connect(
+  mapStateToProps,
+  { placeOrder }
+)(ShoppingCart);

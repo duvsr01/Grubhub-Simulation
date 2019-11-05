@@ -38,9 +38,13 @@ class CreateAccount extends Component {
     this.login = this.login.bind(this);
   }
 
-  componentWillReceivprops(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log("printing nextprops errors 1" + nextProps);
     if (nextProps.errors) {
+      console.log("printing nextprops errors" + nextProps.errors);
       this.setState({ errors: nextProps.errors });
+      let error_value = this.state.errors;
+      console.log("the errors in register state are" + error_value);
     }
   }
   //Call the Will Mount to set the auth Flag to false
@@ -153,10 +157,11 @@ class CreateAccount extends Component {
     const ownerAccountFlag =
       this.state.selectedOption === "owner" ? true : false;
     let text;
-    if (this.props.errors !== null) {
-      let errors = this.props.errors;
+    if (this.state.errors !== null) {
+      let errors = this.state.errors;
+      console.log("error in register" + JSON.stringify(errors));
       if (errors) {
-        if (errors.email === "User already exists") {
+        if (errors.error === "User already exists") {
           text = <p className="text-danger">Account already exists</p>;
         }
       }
@@ -359,12 +364,12 @@ class CreateAccount extends Component {
 CreateAccount.propTypes = {
   registerUser: PropTypes.func.isRequired,
   registerState: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object
 };
 
 const mapStateToProps = state => ({
   registerState: state.registerState,
-  errors: state.errors
+  errors: state.errorState
 });
 
 export default connect(

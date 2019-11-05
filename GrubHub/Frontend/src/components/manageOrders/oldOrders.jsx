@@ -22,7 +22,7 @@ class OldOrders extends Component {
         let newState = Object.assign({}, this.state);
         let newOrders = newState.orders;
         console.log("printing initial state" + newOrders);
-        let orderData = response.data;
+        let orderData = response.data.result;
         console.log("Order Data is " + orderData);
 
         var newBuyer = "";
