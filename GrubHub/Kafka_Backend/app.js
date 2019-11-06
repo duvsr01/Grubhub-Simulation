@@ -24,7 +24,7 @@ var view_owner_msg = require("./services/view_owner_msg.js");
 const db = require("./config/keys").mongoURI;
 // Connect to MongoDB
 mongoose
-  .connect(db)
+  .connect(db, { poolSize: 10 })
   .then(() =>
     console.log("Kafka Backend running - MongoDB Connected from Mongoose")
   )

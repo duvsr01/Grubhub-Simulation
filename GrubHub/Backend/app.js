@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./config/keys").mongoURI;
 // Connect to MongoDB
 mongoose
-  .connect(db)
+  .connect(db, { poolSize: 10 })
   .then(() => console.log("MongoDB Connected from Mongoose"))
   .catch(err => console.log(err));
 
