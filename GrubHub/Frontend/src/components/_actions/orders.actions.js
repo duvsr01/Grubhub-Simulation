@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GET_ERRORS } from "./types";
+import { rooturl } from "../utils/settings.js";
 import {
   MANAGE_ORDERS,
   UPDATE_ORDER,
@@ -13,7 +14,7 @@ export const manageOrders = () => dispatch => {
   let resID = localStorage.getItem("restaurantID");
 
   axios
-    .get("http://localhost:3500/api/orders/manageOrders", {
+    .get("http://" + rooturl + ":3500/api/orders/manageOrders", {
       params: { resID: resID }
     })
     .then(response => {
@@ -33,7 +34,7 @@ export const manageOrders = () => dispatch => {
 //Update Orders
 export const updateOrder = itemObj => dispatch => {
   axios
-    .post("http://localhost:3500/api/orders/updateOrder", itemObj)
+    .post("http://" + rooturl + ":3500/api/orders/updateOrder", itemObj)
     .then(response => {
       dispatch({
         type: UPDATE_ORDER,
@@ -51,7 +52,7 @@ export const updateOrder = itemObj => dispatch => {
 //Place Order
 export const placeOrder = data => dispatch => {
   axios
-    .post("http://localhost:3500/api/orders/placeOrder", data)
+    .post("http://" + rooturl + ":3500/api/orders/placeOrder", data)
     .then(response => {
       dispatch({
         type: PLACE_ORDER,
@@ -70,7 +71,7 @@ export const placeOrder = data => dispatch => {
 export const upComingOrders = () => dispatch => {
   let user_id = localStorage.getItem("userID");
   axios
-    .get("http://localhost:3500/api/orders/upcomingOrders", {
+    .get("http://" + rooturl + ":3500/api/orders/upcomingOrders", {
       params: { buyer_id: user_id }
     })
     .then(response => {
@@ -91,7 +92,7 @@ export const upComingOrders = () => dispatch => {
 export const pastOrders = () => dispatch => {
   let user_id = localStorage.getItem("userID");
   axios
-    .get("http://localhost:3500/api/orders/pastOrders", {
+    .get("http://" + rooturl + ":3500/api/orders/pastOrders", {
       params: { buyer_id: user_id }
     })
     .then(response => {

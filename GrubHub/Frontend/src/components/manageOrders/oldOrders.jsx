@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { rooturl } from "../utils/settings.js";
 
 class OldOrders extends Component {
   state = {
@@ -15,7 +16,7 @@ class OldOrders extends Component {
     var resID = localStorage.getItem("restaurantID");
 
     axios
-      .get("http://localhost:3500/api/orders/manageOrders", {
+      .get("http://" + rooturl + ":3500/api/orders/manageOrders", {
         params: { resID: resID }
       })
       .then(response => {
@@ -84,7 +85,7 @@ class OldOrders extends Component {
     console.log("data is " + JSON.stringify(itemObj));
 
     axios
-      .post("http://localhost:3500/api/orders/updateOrder", itemObj)
+      .post("http://" + rooturl + ":3500/api/orders/updateOrder", itemObj)
       .then(response => {
         console.log("Status Code : ", response.status);
         console.log(response);

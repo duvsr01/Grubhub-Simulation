@@ -1,11 +1,12 @@
 import axios from "axios";
 import { GET_RESTAURANT_DATA, SEARCH_ITEMS } from "./types";
 import { GET_ERRORS } from "./types";
+import { rooturl } from "../utils/settings.js";
 
 //Get Restaurants
 export const getRestaurants = () => dispatch => {
   axios
-    .get("http://localhost:3500/api/restaurants/getRst")
+    .get("http://" + rooturl + ":3500/api/restaurants/getRst")
     .then(response => {
       console.log(response);
       dispatch({
@@ -25,7 +26,7 @@ export const getRestaurants = () => dispatch => {
 export const searchItem = data => dispatch => {
   console.log("Inside search item post");
   axios
-    .post("http://localhost:3500/api/restaurants/searchItem", data)
+    .post("http://" + rooturl + ":3500/api/restaurants/searchItem", data)
     .then(response => {
       dispatch({
         type: SEARCH_ITEMS,

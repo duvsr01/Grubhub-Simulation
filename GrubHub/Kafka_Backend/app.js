@@ -1,4 +1,4 @@
-var connection = new require("./kafka/Connection");
+var connection = new require("./kafka/connection");
 const mongoose = require("mongoose");
 
 //topics files

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { manageOrders, updateOrder } from "../_actions/orders.actions.js";
 import IsEmpty from "../validation/is.empty.js";
+import { rooturl } from "../utils/settings.js";
 
 class ManageOrders extends Component {
   state = {
@@ -123,7 +124,7 @@ class ManageOrders extends Component {
     console.log("data is " + JSON.stringify(itemObj));
 
     axios
-      .post("http://localhost:3500/api/messages/sendMsg", itemObj)
+      .post("http://" + rooturl + ":3500/api/messages/sendMsg", itemObj)
       .then(response => {
         console.log("Status Code : ", response.status);
         console.log(response);

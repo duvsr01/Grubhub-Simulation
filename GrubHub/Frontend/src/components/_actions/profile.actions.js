@@ -2,6 +2,7 @@ import axios from "axios";
 import { GET_ERRORS } from "./types";
 import { SET_PROFILE_DATA } from "./types";
 import { UPDATE_PROFILE_DATA } from "./types";
+import { rooturl } from "../utils/settings.js";
 
 //Get User Profile
 export const getUserProfile = () => dispatch => {
@@ -9,7 +10,7 @@ export const getUserProfile = () => dispatch => {
 
   console.log("Printing email_id " + email);
   axios
-    .get("http://localhost:3500/api/profile/userprofile", {
+    .get("http://" + rooturl + ":3500/api/profile/userprofile", {
       params: { email_id: email }
     })
     .then(response => {
@@ -30,7 +31,7 @@ export const getUserProfile = () => dispatch => {
 
 export const updateUserProfile = data => dispatch => {
   axios
-    .post("http://localhost:3500/api/profile/updprofile", data)
+    .post("http://" + rooturl + ":3500/api/profile/updprofile", data)
     .then(response => {
       console.log("Status Code : ", response.status);
       console.log("update profile response" + response);

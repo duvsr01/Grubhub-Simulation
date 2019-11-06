@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import Draggable from "react-draggable";
+import { rooturl } from "../utils/settings.js";
 
 class ViewMessages extends Component {
   state = {
@@ -68,7 +69,7 @@ class ViewMessages extends Component {
 
     console.log("printing user_id" + user.user_id);
     axios
-      .get("http://localhost:3500/api/messages/viewBuyerMsg", {
+      .get("http://" + rooturl + ":3500/api/messages/viewBuyerMsg", {
         params: { buyer_id: user.user_id }
       })
       .then(response => {

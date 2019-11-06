@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { rooturl } from "../utils/settings.js";
 
 class SendMessage extends Component {
   state = {
@@ -45,7 +46,7 @@ class SendMessage extends Component {
     console.log("data is " + JSON.stringify(itemObj));
 
     axios
-      .post("http://localhost:3500/api/messages/sendMsg", itemObj)
+      .post("http://" + rooturl + ":3500/api/messages/sendMsg", itemObj)
       .then(response => {
         console.log("Status Code : ", response.status);
         console.log(response);

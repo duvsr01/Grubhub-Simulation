@@ -2,11 +2,12 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { rooturl } from "../utils/settings.js";
 
 //Login - Get User Token
 export const loginUser = userData => dispatch => {
   axios
-    .post("http://localhost:3500/api/login/login", userData)
+    .post("http://" + rooturl + ":3500/api/login/login", userData)
     .then(res => {
       const { token } = res.data;
       //Set token to local storage
