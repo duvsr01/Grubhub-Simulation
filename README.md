@@ -3,21 +3,21 @@ Prototype of GrubHub Application - Using React, Node.js Redux, MongoDB, Kafka
 
 This application enables customers to search for restaurants, items and order food online. Also, restaurant owners can manage their restaurant operations and orders. It also has messaging feature to enable commmunication between customers and owners.
 
-Requirements:
-a) Basic Users (Buyer/Restaurant Owner) functionalities:
+### Requirements:
+> a) Basic Users (Buyer/Restaurant Owner) functionalities:
 >- 1. Sign up new Buyer (Name, Email and password)
 >- 2. Sign up new Owner (Name, Email, password, Restaurant name, Restaurant Zip Code)
-3. Sign in existing user
-4. Sign out.
-5. Profile of Buyer (Profile Image, Name, Email, Phone Number)
-5. Profile of Owner (Profile Image, Name, Email, Phone Number, Restaurant Name, Restaurant Image, Cuisine)
-6. Users can update Profile anytime.
-To use the system, a user must login first to the system. Password must be encrypted.
-b) Owner:
-1. Home Page/Orders:
-a. Owner should be able to manage orders
-b. Owner should be able to see every order for his restaurant.
-c. Order details should have:
+>- 3. Sign in existing user
+>- 4. Sign out.
+>- 5. Profile of Buyer (Profile Image, Name, Email, Phone Number)
+>- 5. Profile of Owner (Profile Image, Name, Email, Phone Number, Restaurant Name, Restaurant Image, Cuisine)
+>- 6. Users can update Profile anytime.
+>- To use the system, a user must login first to the system. Password must be encrypted.
+> b) Owner:
+>- 1. Home Page/Orders:
+      - a. Owner should be able to manage orders
+      - b. Owner should be able to see every order for his restaurant.
+      - c. Order details should have:
 1) Ordered Person’s name
 2) Ordered Person’s Address
 3) Item details:
