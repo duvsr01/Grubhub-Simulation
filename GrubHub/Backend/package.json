@@ -14,7 +14,7 @@
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-generator": "^4.16.1",
     "express-router": "0.0.1",
     "gravatar": "^1.8.0",
